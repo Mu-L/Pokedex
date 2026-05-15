@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import com.android.build.api.variant.HostTestBuilder
+
 plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.kotlin.android)
@@ -31,9 +33,14 @@ android {
       arg("room.schemaLocation", "$projectDir/schemas")
     }
   }
+}
 
-  sourceSets.getByName("test") {
-    assets.srcDir(files("$projectDir/schemas"))
+androidComponents {
+  onVariants { variant ->
+    variant.hostTests[HostTestBuilder.UNIT_TEST_TYPE]
+      ?.sources
+      ?.assets
+      ?.addStaticSourceDirectory("$projectDir/schemas")
   }
 }
 
